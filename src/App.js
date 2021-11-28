@@ -1,23 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PieChartIcon from '@mui/icons-material/PieChart';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import GroupIcon from '@mui/icons-material/Group';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import InboxIcon from '@mui/icons-material/Inbox';
-import SettingsIcon from '@mui/icons-material/Settings';
 import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 
 const drawerWidth = 240;
 
@@ -27,17 +14,11 @@ function App() {
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
 				{/* Header */}
-				<AppBar
-					position="fixed"
-					sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-				>
-					<Toolbar>
-						<Typography variant="h6" noWrap component="div">
-							Overview
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<Sidebar></Sidebar>
+				<Header
+					drawerWidth={drawerWidth}
+					text={"Overview"}
+				></Header>
+				<Sidebar drawerWidth={drawerWidth}></Sidebar>
 				<Box
 					component="main"
 					sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
