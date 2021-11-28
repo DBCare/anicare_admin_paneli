@@ -9,8 +9,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#363740',
+      main: "#363740",
     },
+		background: {
+      default: "#F7F8FC",
+    }
   },
 	typography:{
 		fontFamily:'Mulish'

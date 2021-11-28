@@ -2,9 +2,17 @@ import './App.scss';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import Grid from '@mui/material/Grid';
+
+import Sidebar from './components/Sidebar/';
+import Header from './components/Header/';
+import StatsCard from './components/StatsCard'
+
 
 const drawerWidth = 240;
 
@@ -13,44 +21,67 @@ function App() {
     <div className="App">
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
-				{/* Header */}
-				<Header
-					drawerWidth={drawerWidth}
-					text={"Overview"}
-				></Header>
+				<Header drawerWidth={drawerWidth} text={"Overview"}></Header>
 				<Sidebar drawerWidth={drawerWidth}></Sidebar>
 				<Box
 					component="main"
 					sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
 				>
+					{/* gives a padding at top */}
 					<Toolbar />
-					<Typography paragraph>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-						tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-						enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-						imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-						Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-						Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-						adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-						nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-						leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-						feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-						consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-						sapien faucibus et molestie ac.
-					</Typography>
-					<Typography paragraph>
-						Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-						eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-						neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-						tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-						sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-						tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-						gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-						et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-						tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-						eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-						posuere sollicitudin aliquam ultrices sagittis orci a.
-					</Typography>
+						<Grid sx={{textAlign:'center'}}  container spacing={1}>
+							<Grid container item spacing={3}>
+								<Grid item xs={3}>
+									<StatsCard
+										title={"Pending Requests"}
+										value={60}
+									/>
+								</Grid>
+								<Grid item xs={3}>
+									<StatsCard
+										title={"Closed Requests"}
+										value={143}
+									/>
+								</Grid>
+								<Grid item xs={3}>
+									<StatsCard
+										title={"User Count"}
+										value={1500}
+									/>
+								</Grid>
+								<Grid item xs={3}>
+									<StatsCard
+										title={"Product Count"}
+										value={"10K"}
+									/>
+								</Grid>
+							</Grid>
+							<Grid container item spacing={3}>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+							</Grid>
+							<Grid container item spacing={3}>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+								<Grid item xs={4}>
+									Item
+								</Grid>
+							</Grid>
+						</Grid>
+
+
+
 				</Box>
 			</Box>
 

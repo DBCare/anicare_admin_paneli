@@ -13,7 +13,7 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Typography from '@mui/material/Typography';
 
-import './Sidebar.scss'
+import './index.scss'
 
 function SideBar({drawerWidth}) {
   return (
