@@ -13,6 +13,7 @@ import Sidebar from './components/Sidebar/';
 
 import OverviewPage from './pages/OverviewPage'
 import UserManagement from './pages/UserManagementPage'
+import ProductManagement from './pages/ProductManagementPage'
 
 const drawerWidth = 240;
 
@@ -22,8 +23,9 @@ function App() {
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
 				<Sidebar drawerWidth={drawerWidth}></Sidebar>
-				{/* <OverviewPage drawerWidth={drawerWidth}></OverviewPage> */}
-				<UserManagement drawerWidth={drawerWidth}></UserManagement>
+				<OverviewPage drawerWidth={drawerWidth}></OverviewPage>
+				{/* <UserManagement drawerWidth={drawerWidth}></UserManagement> */}
+				{/* <ProductManagement drawerWidth={drawerWidth}></ProductManagement> */}
 			</Box>
     </div>
   );
