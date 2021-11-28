@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import Sidebar from './components/Sidebar/';
 
 import OverviewPage from './pages/OverviewPage'
+import UserManagement from './pages/UserManagementPage'
 
 const drawerWidth = 240;
 
@@ -21,7 +22,8 @@ function App() {
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
 				<Sidebar drawerWidth={drawerWidth}></Sidebar>
-				<OverviewPage drawerWidth={drawerWidth}></OverviewPage>
+				{/* <OverviewPage drawerWidth={drawerWidth}></OverviewPage> */}
+				<UserManagement drawerWidth={drawerWidth}></UserManagement>
 			</Box>
     </div>
   );

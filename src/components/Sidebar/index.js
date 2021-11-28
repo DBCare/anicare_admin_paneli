@@ -55,7 +55,7 @@ function SideBar({drawerWidth}) {
 					</div>
 				</Toolbar>
 				<Divider />
-				<List>
+				<List className="sidebar-list">
 					<ListItem button>
 						<ListItemIcon>
 							<PieChartIcon></PieChartIcon>

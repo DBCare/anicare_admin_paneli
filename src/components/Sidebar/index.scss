@@ -1,7 +1,17 @@
 @import '../../variables';
 
-.MuiSvgIcon-root{
-	fill: $iconColor !important;
-}
+.sidebar-list{
+	div{
+		.MuiSvgIcon-root{
+			fill: #777777 !important;
+			transition: all 0.25s ease-in-out;
+		}
 
+		&:hover{
+			.MuiSvgIcon-root{
+				fill: $iconColor !important;
+			}
+		}
+	}
+}
 
