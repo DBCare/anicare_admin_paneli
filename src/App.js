@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid';
 import Sidebar from './components/Sidebar/';
 import Header from './components/Header/';
 import StatsCard from './components/StatsCard'
-
+import OverviewList from './components/OverviewList';
 
 const drawerWidth = 240;
 
@@ -29,7 +29,7 @@ function App() {
 				>
 					{/* gives a padding at top */}
 					<Toolbar />
-						<Grid sx={{textAlign:'center'}}  container spacing={1}>
+						<Grid sx={{textAlign:'center'}}  container spacing={3}>
 							<Grid container item spacing={3}>
 								<Grid item xs={3}>
 									<StatsCard
@@ -57,30 +57,14 @@ function App() {
 								</Grid>
 							</Grid>
 							<Grid container item spacing={3}>
-								<Grid item xs={4}>
-									Item
+								<Grid item xs={6}>
+									<OverviewList></OverviewList>
 								</Grid>
-								<Grid item xs={4}>
-									Item
-								</Grid>
-								<Grid item xs={4}>
-									Item
-								</Grid>
-							</Grid>
-							<Grid container item spacing={3}>
-								<Grid item xs={4}>
-									Item
-								</Grid>
-								<Grid item xs={4}>
-									Item
-								</Grid>
-								<Grid item xs={4}>
-									Item
+								<Grid item xs={6}>
+									<OverviewList></OverviewList>
 								</Grid>
 							</Grid>
 						</Grid>
-
-
 
 				</Box>
 			</Box>
