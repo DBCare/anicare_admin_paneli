@@ -39,6 +39,7 @@ function ProductsTable() {
 		field: 'operation',
 		headerName: 'Operation',
 		renderCell: (params) => {
+			console.log(params)
 			return(
 				<Button color="error" variant="outlined" onClick={handleClickOpen}>Delete</Button>
 			)
