@@ -17,6 +17,8 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
+import './index.scss'
+
 const columns = [
   { field: 'id', headerName: 'ID' },
   { field: 'details', headerName: 'Request Details', flex: 1 },
@@ -70,8 +72,8 @@ function RequestsTable() {
         rowsPerPageOptions={[5]}
 				disableExtendRowFullWidth={true}
 				onCellDoubleClick={doubleClickHandler}
+				className="request-table"
       />
-			<Button onClick={handleOpen}>Open modal</Button>
 			<Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -85,7 +87,11 @@ function RequestsTable() {
       >
         <Fade in={open}>
           <Box sx={style}>
-						<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+						<List sx={{ 
+							width: '100%', 
+							maxWidth: 360, 
+							bgcolor: 'background.paper'
+						}}>
 							<ListItem>
 								{activeRow.requester}
 							</ListItem>
