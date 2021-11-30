@@ -7,6 +7,7 @@ import OverviewPage from './pages/OverviewPage'
 import UserManagement from './pages/UserManagementPage'
 import ProductManagement from './pages/ProductManagementPage'
 import RequestManagement from './pages/RequestManagementPage'
+import CompanyManagement from './pages/CompanyManagementPage'
 
 import {
   Routes,
@@ -22,18 +23,14 @@ function App() {
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
 				<Sidebar drawerWidth={drawerWidth}></Sidebar>
-
 				<Routes>
 					<Route path="/" element={<OverviewPage drawerWidth={drawerWidth}></OverviewPage>}></Route>
 					<Route path="/table/requests" element={<RequestManagement drawerWidth={drawerWidth}></RequestManagement>}></Route>
 					<Route path="/table/users" element={<UserManagement drawerWidth={drawerWidth}></UserManagement>}></Route>
 					<Route path="/table/products" element={<ProductManagement drawerWidth={drawerWidth}></ProductManagement>}></Route>
+					<Route path="/table/products" element={<ProductManagement drawerWidth={drawerWidth}></ProductManagement>}></Route>
+					<Route path="/table/company" element={<CompanyManagement drawerWidth={drawerWidth}></CompanyManagement>}></Route>
 				</Routes>
-
-				{/* <OverviewPage drawerWidth={drawerWidth}></OverviewPage> */}
-				{/* <UserManagement drawerWidth={drawerWidth}></UserManagement> */}
-				{/* <ProductManagement drawerWidth={drawerWidth}></ProductManagement> */}
-				{/* <RequestManagement drawerWidth={drawerWidth}></RequestManagement> */}
 			</Box>
     </div>
   );
