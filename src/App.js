@@ -8,6 +8,7 @@ import UserManagement from './pages/UserManagementPage'
 import ProductManagement from './pages/ProductManagementPage'
 import RequestManagement from './pages/RequestManagementPage'
 import CompanyManagement from './pages/CompanyManagementPage'
+import BrandManagement from './pages/BrandManagementPage'
 
 import {
   Routes,
@@ -30,6 +31,7 @@ function App() {
 					<Route path="/table/products" element={<ProductManagement drawerWidth={drawerWidth}></ProductManagement>}></Route>
 					<Route path="/table/products" element={<ProductManagement drawerWidth={drawerWidth}></ProductManagement>}></Route>
 					<Route path="/table/company" element={<CompanyManagement drawerWidth={drawerWidth}></CompanyManagement>}></Route>
+					<Route path="/table/brand" element={<BrandManagement drawerWidth={drawerWidth}></BrandManagement>}></Route>
 				</Routes>
 			</Box>
     </div>
