@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import GroupIcon from '@mui/icons-material/Group';
+import StoreIcon from '@mui/icons-material/Store';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import InboxIcon from '@mui/icons-material/Inbox';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -67,6 +68,18 @@ function SideBar({drawerWidth}) {
 							<PieChartIcon></PieChartIcon>
 						</ListItemIcon>
 						<ListItemText primary={"Overview"} />
+					</ListItem>
+					<ListItem button component={Link} to="/table/company">
+						<ListItemIcon>
+							<StoreIcon></StoreIcon>
+						</ListItemIcon>
+						<ListItemText primary={"Company Management"} />
+					</ListItem>
+					<ListItem button component={Link} to="/table/brand">
+						<ListItemIcon>
+							<Inventory2Icon></Inventory2Icon>
+						</ListItemIcon>
+						<ListItemText primary={"Brand Management"} />
 					</ListItem>
 					<ListItem button component={Link} to="/table/products">
 						<ListItemIcon>
