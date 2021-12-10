@@ -1,7 +1,7 @@
 @import '../../variables';
 
 .sidebar-list{
-	div{
+	div, a{
 		.MuiSvgIcon-root{
 			fill: #777777 !important;
 			transition: all 0.25s ease-in-out;
