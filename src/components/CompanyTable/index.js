@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import axios from 'axios'
+
+// firebase
 import app from '../../util/firebase'
 import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
 
@@ -108,7 +110,7 @@ function CompanyTable() {
 
 	const handleSubmit = (event)  => {
 		event.preventDefault();
-		const obj = {...fvalues, brand_number:0}
+		const obj = {...fvalues}
 
 		const db = getDatabase(app);
 		push(ref(db, 'companies'), obj);

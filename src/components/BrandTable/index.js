@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -18,19 +18,26 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
+import FormControl from '@mui/material/FormControl';
 
+
+// firebase
+import app from '../../util/firebase'
+import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
 
 const columns = [
   { field: 'id', headerName: 'Brand ID', flex:1 },
-  { field: 'brand', headerName: 'Brand Name', flex: 1 },
+	{ field: 'barcode_prefix', headerName: 'Barcode Prefix', flex:1},
+	{ field: 'category', headerName: 'Category', flex: 1},
+  { field: 'name', headerName: 'Brand Name', flex: 1 },
   { field: 'company', headerName: 'Company Name', flex: 1 },
-	{ field: 'cf', headerName: 'Cruelty Free', flex: 1 },
+	{ field: 'cruelty_free', headerName: 'Cruelty Free', flex: 1 },
 ];
 
 const rows = [
-  { id: 1, brand: 'Axe', company: "Unilever", cf:true },
-	{ id: 2, brand: 'Dove', company: "Unilever", cf:false },
-	{ id: 3, brand: 'Rexona', company: "Unilever", cf:true },
+  { id: 1, name: 'Axe', company: "Unilever", cruelty_free:true },
+	{ id: 2, name: 'Dove', company: "Unilever", cruelty_free:false },
+	{ id: 3, name: 'Rexona', company: "Unilever", cruelty_free:true },
 ];
 
 const style = {
@@ -48,7 +55,11 @@ const style = {
 	alignItems:'center'
 };
 
+const stringToBoolean = (str) => str.toLowerCase() === 'true'
+
 function BrandTable() {
+	const [companies, setCompanies] = useState([]);
+	const [brands, setBrands] = useState([]);
 	const [fvalues, setfValues] = useState("")
 	const [addOpen, setAddOpen] = useState(false);
 	const [editOpen, setEditOpen] = useState(false);
@@ -61,10 +72,12 @@ function BrandTable() {
 		renderCell: ({row}) => {
 			return(
 				<>
-					<Button color="error" variant="contained" onClick={() => setDeleteOpen(true)}>Delete</Button>
+					<Button color="error" variant="contained" onClick={() => {
+						setfValues({...row})
+						setDeleteOpen(true)
+					}}>Delete</Button>
 					<Button color="warning" variant="contained" onClick={() => {
-						setfValues({id:row.id, brand:row.brand, company:row.company, cf:row.cf, company_id:1})
-						console.log(fvalues)
+						setfValues({...row})
 						setEditOpen(true)
 					}}>Edit</Button>
 				</>
@@ -73,13 +86,87 @@ function BrandTable() {
 		flex: 1
 	})
 
-	const handleSubmit = (event)  => {
+	useEffect(async () => {
+		const database = getDatabase(app);
+		const companyRef = ref(database, 'companies')
+		const brandRef = ref(database, 'brands');
+
+		onValue(companyRef, (snapshot) => {
+			const companyResult = snapshot.val();
+			onValue(brandRef, (snapshot) => {
+				const brandResult = snapshot.val();
+
+				// generate company array
+				let companyArr = []
+				for(let key in companyResult){
+					companyArr.push({
+						...companyResult[key],
+						id:key,
+					})
+				}
+
+				// generate brand array
+				let brandArr = []
+				for(let key in brandResult){
+					brandArr.push({
+						...brandResult[key],
+						id:key
+					})
+				}
+
+				// adjust brandArr
+				brandArr = brandArr.map(function(item){
+					let companyName = ""
+					let temp = companyArr.find(c => c.id == item.company_id)
+					if(temp){
+						companyName = temp.name;
+					}
+					return {
+						...item,
+						cruelty_free:Boolean(JSON.parse(item.cruelty_free)),
+						company:companyName
+					}
+					return item;
+				})
+
+				console.log(brandArr)
+
+				setCompanies(companyArr)
+				setBrands(brandArr)
+
+			})
+		});
+	},[])	
+
+	const handleSubmit = event => {
 		event.preventDefault();
-		console.log("form submitted")
-		console.log(fvalues);
+
+		const db = getDatabase(app);
+		push(ref(db, 'brands'), fvalues);
+		
 		setAddOpen(false)
 		setEditOpen(false)
 		setfValues({})
+	}
+
+	const handleUpdate = event => {
+		event.preventDefault()
+		
+		const db = getDatabase(app);
+		update(ref(db, 'brands/' + fvalues.id), fvalues)
+		
+		setfValues({})
+		setEditOpen(false);
+	}
+
+	const handleRemove = event => {
+		event.preventDefault()
+		
+		const db = getDatabase(app);
+		remove(ref(db, 'brands/' + fvalues.id))
+		
+		setfValues({})
+		setDeleteOpen(false);
 	}
 
   return (
@@ -88,7 +175,7 @@ function BrandTable() {
       <DataGrid
 				disableSelectionOnClick={true}
 				autoHeight={true}
-        rows={rows}
+        rows={brands}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
@@ -106,62 +193,64 @@ function BrandTable() {
 			>
 				<Box sx={style}>
 					<form onSubmit={handleSubmit}>
-						<TextField
-							required
-							value={fvalues.brand}
-							name="brand"
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Brand Name"
-						></TextField>
-						<InputLabel id="demo-simple-select-label">Company Name</InputLabel>
-						<Select
-							name="company_id"
-							required
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={fvalues.company_id}
-							label="Age"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* company names and id's */}
-							<MenuItem value={1}>Company-1</MenuItem>
-							<MenuItem value={2}>Company-2</MenuItem>
-							<MenuItem value={3}>Company-3</MenuItem>
-						</Select>
-						<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
-						<RadioGroup
-							required
-							aria-label="cruelty free"
-							name="cf"
-							value={fvalues.cf}
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							<FormControlLabel value={true} control={<Radio />} label="True" />
-							<FormControlLabel value={false} control={<Radio />} label="False" />
-						</RadioGroup>
-						<Button
-							type="submit"
-							variant="outlined"
-						>Add Brand</Button>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.name}
+								name="name"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Brand Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<InputLabel id="demo-simple-select-label">Company Name</InputLabel>
+							<Select
+								name="company_id"
+								required
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={fvalues.company_id}
+								label="Company Name"
+								sx={{width:'100%'}}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								{/* company names and id's */}
+								{companies.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+							</Select>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
+							<RadioGroup
+								required
+								aria-label="cruelty free"
+								name="cruelty_free"
+								value={fvalues.cruelty_free}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={true} control={<Radio />} label="True" />
+								<FormControlLabel value={false} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<Button type="submit" variant="outlined">Add Brand</Button>
 					</form>
 				</Box>
 			</Modal>
@@ -176,75 +265,79 @@ function BrandTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit}>
-						<TextField
-							value={fvalues.id}
-							name="id"
-							variant="outlined"
-							label="Brand Id"
-							InputProps={{
-								readOnly: true,
-							}}
-						></TextField>
-						<TextField
-							required
-							value={fvalues.brand}
-							name="brand"
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Brand Name"
-						></TextField>
-						<InputLabel id="demo-simple-select-label">Company Name</InputLabel>
-						<Select
-							name="company_id"
-							required
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={fvalues.company_id}
-							label="Age"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* company names and id's */}
-							<MenuItem value={1}>Company-1</MenuItem>
-							<MenuItem value={2}>Company-2</MenuItem>
-							<MenuItem value={3}>Company-3</MenuItem>
-						</Select>
-						<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
-						<RadioGroup
-							required
-							aria-label="cruelty free"
-							name="cf"
-							value={fvalues.cf}
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							<FormControlLabel value={true} control={<Radio />} label="True" />
-							<FormControlLabel value={false} control={<Radio />} label="False" />
-						</RadioGroup>
-						<Button
-							type="submit"
-							variant="outlined"
-						>Add Brand</Button>
+					<form onSubmit={handleUpdate}>
+						<FormControl fullWidth>
+							<TextField
+								value={fvalues.id}
+								name="id"
+								variant="outlined"
+								label="Brand Id"
+								InputProps={{
+									readOnly: true,
+								}}
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.name}
+								name="name"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Brand Name"
+							/>	
+						</FormControl>
+						<FormControl fullWidth>
+							<InputLabel id="demo-simple-select-label">Company Name</InputLabel>
+							<Select
+								name="company_id"
+								required
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={fvalues.company_id}
+								label="Company Name"
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								{/* company names and id's */}
+								{companies.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+							</Select>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
+							<RadioGroup
+								required
+								aria-label="cruelty free"
+								name="cruelty_free"
+								value={fvalues.cruelty_free}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={true} control={<Radio />} label="True" />
+								<FormControlLabel value={false} control={<Radio />} label="False" />
+							</RadioGroup>					
+						</FormControl>					
+						<Button	type="submit" variant="outlined">Edit Brand</Button>
 					</form>
 				</Box>
 			</Modal>
+
 			{/* DELETE BUTTON DIALOG */}
 			 <Dialog
         open={deleteOpen}
@@ -257,7 +350,7 @@ function BrandTable() {
         </DialogTitle>
         <DialogActions>
           <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
-          <Button onClick={() => setDeleteOpen(false)} autoFocus>
+          <Button onClick={handleRemove} autoFocus>
             Delete
           </Button>
         </DialogActions>
