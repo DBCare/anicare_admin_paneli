@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -18,12 +18,18 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
+import FormControl from '@mui/material/FormControl';
 
+// firebase
+import app from '../../util/firebase'
+import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
 
 const columns = [
   { field: 'id', headerName: 'Product ID', flex:1 },
-	{ field: 'product', headerName : 'Product Name', flex:1 },
+	{ field: 'name', headerName : 'Product Name', flex:1 },
   { field: 'brand', headerName: 'Brand Name', flex: 1 },
+	{ field: 'category', headerName: 'Category Name', flex: 1},
+	{ field: 'description', headerName: 'Description', flex: 1},
   { field: 'company', headerName: 'Company Name', flex: 1 },
 ];
 
@@ -49,6 +55,9 @@ const style = {
 };
 
 function ProductTable() {
+	const [products, setProducts] = useState([]);
+	const [brands, setBrands] = useState([]);
+	const [companies, setCompanies] = useState([]);
 	const [fvalues, setfValues] = useState("")
 	const [addOpen, setAddOpen] = useState(false);
 	const [editOpen, setEditOpen] = useState(false);
@@ -61,10 +70,12 @@ function ProductTable() {
 		renderCell: ({row}) => {
 			return(
 				<>
-					<Button color="error" variant="contained" onClick={() => setDeleteOpen(true)}>Delete</Button>
+					<Button color="error" variant="contained" onClick={() => {
+						setfValues({...row})
+						setDeleteOpen(true)
+					}}>Delete</Button>
 					<Button color="warning" variant="contained" onClick={() => {
-						setfValues({id:row.id, product:row.product, brand:row.brand, company:row.company, brand_id:1, company_id:1})
-						console.log(fvalues)
+						setfValues({...row})
 						setEditOpen(true)
 					}}>Edit</Button>
 				</>
@@ -73,12 +84,99 @@ function ProductTable() {
 		flex: 1
 	})
 
-	const handleSubmit = (event)  => {
+	useEffect(async () => {
+		const database = getDatabase(app);
+		const companyRef = ref(database, 'companies')
+		const brandRef = ref(database, 'brands');
+		const productRef = ref(database, 'products');
+
+		onValue(companyRef, (snapshot) => {
+			const companyResult = snapshot.val();
+			onValue(brandRef, (snapshot) => {
+				const brandResult = snapshot.val();
+				onValue(productRef, (snapshot) => {
+					const productResult = snapshot.val()
+
+					// generate company array
+					let companyArr = []
+					for(let key in companyResult){
+						companyArr.push({
+							...companyResult[key],
+							id:key,
+						})
+					}
+
+					// generate brand array
+					let brandArr = []
+					for(let key in brandResult){
+						brandArr.push({
+							...brandResult[key],
+							id:key
+						})
+					}
+					
+					// generate product array
+					let productArr = []
+					for(let key in productResult){
+						productArr.push({
+							...productResult[key],
+							id:key
+						})
+					}
+
+					// adjust brandArr
+					productArr = productArr.map(function(item){
+						let brandName = ""
+						let temp = brandArr.find(c => c.id == item.brand_id)
+						if(temp){
+							brandName = temp.name;
+						}
+						return {
+							...item,
+							brand:brandName
+						}
+						return item;
+					})
+
+					console.log(productArr)
+					setCompanies(companyArr)
+					setBrands(brandArr)
+					setProducts(productArr)
+				})
+			})
+		});
+	},[])	
+
+	const handleSubmit = event  => {
 		event.preventDefault();
-		console.log("form submitted")
 		console.log(fvalues);
+
+		const db = getDatabase(app);
+		push(ref(db, 'products'), fvalues);
+
 		setAddOpen(false)
 		setEditOpen(false)
+		setfValues({})
+	}
+
+	const handleUpdate = event => {
+		event.preventDefault()
+		console.log(fvalues)
+
+		const db = getDatabase(app);
+		update(ref(db, 'products/' + fvalues.id), fvalues)
+		
+		setEditOpen(false);
+		setfValues({})
+	}
+
+	const handleRemove = event => {
+		event.preventDefault()
+
+		const db = getDatabase(app);
+		remove(ref(db, 'products/' + fvalues.id))
+
+		setDeleteOpen(false)
 		setfValues({})
 	}
 
@@ -88,7 +186,7 @@ function ProductTable() {
       <DataGrid
 				disableSelectionOnClick={true}
 				autoHeight={true}
-        rows={rows}
+        rows={products}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
@@ -106,62 +204,43 @@ function ProductTable() {
 			>
 				<Box sx={style}>
 					<form onSubmit={handleSubmit}>
-						<TextField
-							required
-							value={fvalues.brand}
-							name="product"
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Product Name"
-						></TextField>
-						<InputLabel id="demo-simple-select-label">Brand Name</InputLabel>
-						<Select
-							name="brand_id"
-							required
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={fvalues.brand_id}
-							label="Brand Name"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* brand names and id's */}
-							<MenuItem value={1}>Brand-1</MenuItem>
-							<MenuItem value={2}>Brand-2</MenuItem>
-							<MenuItem value={3}>Brand-3</MenuItem>
-						</Select>
-						<InputLabel id="demo-simple-select-label-2">Company Name</InputLabel>
-						<Select
-							name="company_id"
-							required
-							labelId="demo-simple-select-label-2"
-							id="demo-simple-select"
-							value={fvalues.company_id}
-							label="Company Name"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* company names and id's */}
-							<MenuItem value={1}>Company-1</MenuItem>
-							<MenuItem value={2}>Company-2</MenuItem>
-							<MenuItem value={3}>Company-3</MenuItem>
-						</Select>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.name}
+								name="name"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<InputLabel id="demo-simple-select-label">Brand Name</InputLabel>
+							<Select
+								name="brand_id"
+								required
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={fvalues.brand_id}
+								label="Brand Name"
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								{/* brand names and id's */}
+								{brands.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+							</Select>
+						</FormControl>				
 						<Button
 							type="submit"
 							variant="outlined"
@@ -180,76 +259,59 @@ function ProductTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit}>
-						<TextField
-							value={fvalues.id}
-							name="id"
-							variant="outlined"
-							label="Product Id"
-							InputProps={{
-								readOnly: true,
-							}}
-						></TextField>
-						<TextField
-							required
-							value={fvalues.product}
-							name="product"
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Product Name"
-						></TextField>
-						<InputLabel id="demo-simple-select-label">Brand Name</InputLabel>
-						<Select
-							name="brand_id"
-							required
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={fvalues.brand_id}
-							label="Brand Name"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* brand names and id's */}
-							<MenuItem value={1}>Brand-1</MenuItem>
-							<MenuItem value={2}>Brand-2</MenuItem>
-							<MenuItem value={3}>Brand-3</MenuItem>
-						</Select>
-						<InputLabel id="demo-simple-select-label-2">Company Name</InputLabel>
-						<Select
-							name="company_id"
-							required
-							labelId="demo-simple-select-label-2"
-							id="demo-simple-select"
-							value={fvalues.company_id}
-							label="Company Name"
-							onChange={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-						>
-							{/* company names and id's */}
-							<MenuItem value={1}>Company-1</MenuItem>
-							<MenuItem value={2}>Company-2</MenuItem>
-							<MenuItem value={3}>Company-3</MenuItem>
-						</Select>
+					<form onSubmit={handleUpdate}>
+						<FormControl fullWidth>
+							<TextField
+								value={fvalues.id}
+								name="id"
+								variant="outlined"
+								label="Product Id"
+								InputProps={{
+									readOnly: true,
+								}}
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.name}
+								name="name"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<InputLabel id="demo-simple-select-label">Brand Name</InputLabel>
+							<Select
+								name="brand_id"
+								required
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={fvalues.brand_id}
+								label="Brand Name"
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								{/* brand names and id's */}
+								{brands.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
+							</Select>						
+						</FormControl>
 						<Button
 							type="submit"
 							variant="outlined"
-						>Add Product</Button>
+						>Edit Product</Button>
 					</form>
 				</Box>
 			</Modal>
@@ -265,7 +327,7 @@ function ProductTable() {
         </DialogTitle>
         <DialogActions>
           <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
-          <Button onClick={() => setDeleteOpen(false)} autoFocus>
+          <Button onClick={handleRemove} autoFocus>
             Delete
           </Button>
         </DialogActions>
