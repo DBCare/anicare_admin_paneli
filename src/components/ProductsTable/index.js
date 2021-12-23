@@ -20,6 +20,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+
 // firebase
 import app from '../../util/firebase'
 import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
@@ -53,6 +55,12 @@ const style = {
 	justifyContent:'center',
 	alignItems:'center'
 };
+
+const formStyle={
+	"& div" : {
+		marginTop : '10px'
+	}
+}
 
 function ProductTable() {
 	const [products, setProducts] = useState([]);
@@ -151,8 +159,8 @@ function ProductTable() {
 		event.preventDefault();
 		console.log(fvalues);
 
-		const db = getDatabase(app);
-		push(ref(db, 'products'), fvalues);
+		// const db = getDatabase(app);
+		// push(ref(db, 'products'), fvalues);
 
 		setAddOpen(false)
 		setEditOpen(false)
@@ -203,7 +211,7 @@ function ProductTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} className="table-form">
 						<FormControl fullWidth>
 							<TextField
 								required
@@ -218,6 +226,89 @@ function ProductTable() {
 								}}
 								variant="outlined"
 								label="Product Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.description}
+								name="description"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Description"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.category}
+								name="category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Category"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.picUrl}
+								name="pic-url"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Picture Url"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel>Vegan Status</FormLabel>
+							<RadioGroup
+								aria-label="Vegan Status"
+								name="status_vegan"
+								value={fvalues["status_vegan"]}
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+							>
+								<FormControlLabel value="1" control={<Radio />} label="True" />
+								<FormControlLabel value="0" control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["sub_category"]}
+								name="sub_category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Sub Category"
 							/>
 						</FormControl>
 						<FormControl fullWidth>
@@ -259,7 +350,7 @@ function ProductTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleUpdate}>
+					<form onSubmit={handleUpdate} className="table-form">
 						<FormControl fullWidth>
 							<TextField
 								value={fvalues.id}
@@ -285,6 +376,89 @@ function ProductTable() {
 								}}
 								variant="outlined"
 								label="Product Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.description}
+								name="description"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Description"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.category}
+								name="category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Category"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["pic-url"]}
+								name="pic-url"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Product Picture Url"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel>Vegan Status</FormLabel>
+							<RadioGroup
+								aria-label="Vegan Status"
+								name="status_vegan"
+								value={fvalues["status_vegan"]}
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+							>
+								<FormControlLabel value="1" control={<Radio />} label="True" />
+								<FormControlLabel value="0" control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["sub_category"]}
+								name="sub_category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Sub Category"
 							/>
 						</FormControl>
 						<FormControl fullWidth>
