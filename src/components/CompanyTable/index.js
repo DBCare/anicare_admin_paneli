@@ -5,6 +5,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import axios from 'axios'
 
+import FormControl from '@mui/material/FormControl';
+
 // firebase
 import app from '../../util/firebase'
 import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
@@ -160,37 +162,41 @@ function CompanyTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit}>
-						<TextField
-							required
-							value={fvalues.name}
-							name="name"
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Company Name"
-						/>
-						<TextField
-							required
-							value={fvalues.country_code}
-							name="country_code"
-							onInput={({target}) => {
-								const {name, value} = target
-								const obj = {
-									...fvalues,
-									[name]:value
-								} 
-								setfValues(obj)
-							}}
-							variant="outlined"
-							label="Country Code"
-							inputProps={{ style: { textTransform: "uppercase" } }}
-						/>
+					<form onSubmit={handleSubmit} className="table-form">
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.name}
+								name="name"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Company Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.country_code}
+								name="country_code"
+								onInput={({target}) => {
+									const {name, value} = target
+									const obj = {
+										...fvalues,
+										[name]:value
+									} 
+									setfValues(obj)
+								}}
+								variant="outlined"
+								label="Country Code"
+								inputProps={{ style: { textTransform: "uppercase" } }}
+							/>
+						</FormControl>
 						<Button
 							type="submit"
 							variant="outlined"
@@ -209,45 +215,51 @@ function CompanyTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleUpdate}>
-						<TextField
-							value={fvalues.id}
-							variant="outlined"
-							label="Company Id"
-							InputProps={{
-								readOnly: true,
-							}}
-						/>
-						<TextField
-							required
-							name="name"
-							value={fvalues.name}
-							onInput={({target}) => {
-								const {name, value} = target
-								setfValues({
-									...fvalues,
-									[name]:value
-								})
-							}}
-							variant="outlined"
-							label="Company Name"
-						/>
-						<TextField
-							required
-							value={fvalues.country_code}
-							name="country_code"
-							onInput={({target}) => {
-								const {name, value} = target
-								const obj = {
-									...fvalues,
-									[name]:value
-								} 
-								setfValues(obj)
-							}}
-							variant="outlined"
-							label="Country Code"
-							inputProps={{ style: { textTransform: "uppercase" } }}
-						/>
+					<form onSubmit={handleUpdate} className="table-form">
+						<FormControl fullWidth>
+							<TextField
+								value={fvalues.id}
+								variant="outlined"
+								label="Company Id"
+								InputProps={{
+									readOnly: true,
+								}}
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								name="name"
+								value={fvalues.name}
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Company Name"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues.country_code}
+								name="country_code"
+								onInput={({target}) => {
+									const {name, value} = target
+									const obj = {
+										...fvalues,
+										[name]:value
+									} 
+									setfValues(obj)
+								}}
+								variant="outlined"
+								label="Country Code"
+								inputProps={{ style: { textTransform: "uppercase" } }}
+							/>
+						</FormControl>
 						<Button
 							type="submit"
 							variant="outlined"
