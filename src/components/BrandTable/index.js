@@ -49,9 +49,14 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-	display:'flex',
-	justifyContent:'center',
-	alignItems:'center'
+	// display: 'grid',
+	// gridTemplateColumns: 'auto auto auto'
+	// gridTemplateColumns: '50% 50%',
+	// gridTemplateRows: '1fr',
+	// columnGap: '20px'
+	// display:'flex',
+	// justifyContent:'center',
+	// alignItems:'center',
 };
 
 const stringToBoolean = (str) => str.toLowerCase() === 'true'
@@ -191,7 +196,7 @@ function BrandTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} className="table-form">
 						<FormControl fullWidth>
 							<TextField
 								required
@@ -231,6 +236,206 @@ function BrandTable() {
 							</Select>
 						</FormControl>
 						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["barcode_prefix"]}
+								name="barcode_prefix"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Barcode Prefix"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["category"]}
+								name="category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Category"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["pic-url"]}
+								name="pic-url"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Picture Url"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status CFK?</FormLabel>
+							<RadioGroup
+								required
+								aria-label="cruelty free"
+								name="status_cfk"
+								value={fvalues["status_cfk"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status China</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status china"
+								name="status_china"
+								value={fvalues["status_china"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status EE</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status ee"
+								name="status_ee"
+								value={fvalues["status_ee"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status ES</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status es"
+								name="status_es"
+								value={fvalues["status_es"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status LH</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="status_lh"
+								value={fvalues["status_lh"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer CCF</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_ccf"
+								value={fvalues["cer_ccf"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer LB</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_lb"
+								value={fvalues["cer_lb"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer Peta</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_peta"
+								value={fvalues["cer_peta"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
 							<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
 							<RadioGroup
 								required
@@ -265,18 +470,7 @@ function BrandTable() {
 			>
 				<Box sx={style}>
 					<form onSubmit={handleUpdate}>
-						<FormControl fullWidth>
-							<TextField
-								value={fvalues.id}
-								name="id"
-								variant="outlined"
-								label="Brand Id"
-								InputProps={{
-									readOnly: true,
-								}}
-							/>
-						</FormControl>
-						<FormControl fullWidth>
+					<FormControl fullWidth>
 							<TextField
 								required
 								value={fvalues.name}
@@ -290,7 +484,7 @@ function BrandTable() {
 								}}
 								variant="outlined"
 								label="Brand Name"
-							/>	
+							/>
 						</FormControl>
 						<FormControl fullWidth>
 							<InputLabel id="demo-simple-select-label">Company Name</InputLabel>
@@ -301,6 +495,7 @@ function BrandTable() {
 								id="demo-simple-select"
 								value={fvalues.company_id}
 								label="Company Name"
+								sx={{width:'100%'}}
 								onChange={({target}) => {
 									const {name, value} = target
 									setfValues({
@@ -312,6 +507,206 @@ function BrandTable() {
 								{/* company names and id's */}
 								{companies.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 							</Select>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["barcode_prefix"]}
+								name="barcode_prefix"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Barcode Prefix"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["category"]}
+								name="category"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Category"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<TextField
+								required
+								value={fvalues["pic-url"]}
+								name="pic-url"
+								onInput={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+								variant="outlined"
+								label="Picture Url"
+							/>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status CFK?</FormLabel>
+							<RadioGroup
+								required
+								aria-label="cruelty free"
+								name="status_cfk"
+								value={fvalues["status_cfk"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status China</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status china"
+								name="status_china"
+								value={fvalues["status_china"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status EE</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status ee"
+								name="status_ee"
+								value={fvalues["status_ee"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status ES</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status es"
+								name="status_es"
+								value={fvalues["status_es"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Status LH</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="status_lh"
+								value={fvalues["status_lh"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer CCF</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_ccf"
+								value={fvalues["cer_ccf"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer LB</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_lb"
+								value={fvalues["cer_lb"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
+						</FormControl>
+						<FormControl fullWidth>
+							<FormLabel component="legend">Cer Peta</FormLabel>
+							<RadioGroup
+								required
+								aria-label="status LH"
+								name="cer_peta"
+								value={fvalues["cer_peta"]}
+								onChange={({target}) => {
+									const {name, value} = target
+									setfValues({
+										...fvalues,
+										[name]:value
+									})
+								}}
+							>
+								<FormControlLabel value={"1"} control={<Radio />} label="True" />
+								<FormControlLabel value={"0"} control={<Radio />} label="False" />
+							</RadioGroup>
 						</FormControl>
 						<FormControl fullWidth>
 							<FormLabel component="legend">Is Cruelty-Free?</FormLabel>
