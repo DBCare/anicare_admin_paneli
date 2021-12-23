@@ -9,23 +9,31 @@ import ProductManagement from './pages/ProductManagementPage'
 import RequestManagement from './pages/RequestManagementPage'
 import CompanyManagement from './pages/CompanyManagementPage'
 import BrandManagement from './pages/BrandManagementPage'
+import LoginPage from './pages/LoginPage'
 
 import {
   Routes,
   Route,
-  Link
+  Link,
+	useLocation
 } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function App() {
+
+	let { pathname } = useLocation();
+
   return (
     <div className="App">
 			<Box sx={{ display: 'flex' }}>
 				<CssBaseline />
-				<Sidebar drawerWidth={drawerWidth}></Sidebar>
+				{
+					pathname !== "/login" && <Sidebar drawerWidth={drawerWidth}></Sidebar> 
+				}
 				<Routes>
 					<Route path="/" element={<OverviewPage drawerWidth={drawerWidth}></OverviewPage>}></Route>
+					<Route path="/login" element={<LoginPage></LoginPage>}></Route>
 					<Route path="/table/requests" element={<RequestManagement drawerWidth={drawerWidth}></RequestManagement>}></Route>
 					<Route path="/table/users" element={<UserManagement drawerWidth={drawerWidth}></UserManagement>}></Route>
 					<Route path="/table/products" element={<ProductManagement drawerWidth={drawerWidth}></ProductManagement>}></Route>
