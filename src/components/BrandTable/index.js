@@ -49,14 +49,11 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-	// display: 'grid',
-	// gridTemplateColumns: 'auto auto auto'
-	// gridTemplateColumns: '50% 50%',
-	// gridTemplateRows: '1fr',
-	// columnGap: '20px'
-	// display:'flex',
-	// justifyContent:'center',
-	// alignItems:'center',
+	display:'flex',
+	justifyContent:'center',
+	alignItems:'center',
+	maxHeight: '70%',
+	overflow: 'scroll'
 };
 
 const stringToBoolean = (str) => str.toLowerCase() === 'true'
@@ -196,7 +193,7 @@ function BrandTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleSubmit} className="table-form">
+					<form onSubmit={handleSubmit} className="table-form" style={{margin:'auto'}}>
 						<FormControl fullWidth>
 							<TextField
 								required
@@ -469,7 +466,7 @@ function BrandTable() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<form onSubmit={handleUpdate}>
+					<form onSubmit={handleUpdate} className='table-form' style={{margin:'auto'}}>
 					<FormControl fullWidth>
 							<TextField
 								required
