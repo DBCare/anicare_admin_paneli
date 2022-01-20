@@ -159,8 +159,8 @@ function ProductTable() {
 		event.preventDefault();
 		console.log(fvalues);
 
-		// const db = getDatabase(app);
-		// push(ref(db, 'products'), fvalues);
+		const db = getDatabase(app);
+		push(ref(db, 'products'), fvalues);
 
 		setAddOpen(false)
 		setEditOpen(false)

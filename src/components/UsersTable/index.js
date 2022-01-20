@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 
@@ -9,70 +9,83 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+// firebase
+import app from '../../util/firebase'
+import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
+
 import './index.scss'
+
 
 const columns = [
   { field: 'id', headerName: 'ID', flex: 1 },
-  { field: 'firstName', headerName: 'First name', flex: 1 },
-  { field: 'lastName', headerName: 'Last name', flex: 1 },
+  { field: 'firstname', headerName: 'First name', flex: 1 },
+  { field: 'lastname', headerName: 'Last name', flex: 1 },
+	{ field: 'email', headerName: 'Last name', flex: 1 },
+	{ field: 'allergies', headerName: 'Allergies', flex: 1 },
   {
-    field: 'age',
-    headerName: 'Age',
-    flex: 1,
-  },
-  {
-    field: 'fullName',
+    field: 'fullname',
     headerName: 'Full name',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
 		flex: 1,
     valueGetter: (params) =>
-      `${params.getValue(params.id, 'firstName') || ''} ${
-        params.getValue(params.id, 'lastName') || ''
+      `${params.getValue(params.id, 'firstname') || ''} ${
+        params.getValue(params.id, 'lastname') || ''
       }`,
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
 function UsersTable() {
 	const [open, setOpen] = useState(false);
+	const [users, setUsers] = useState([]);
+	const [fvalues, setfValues] = useState("")
+	
+	const handleRemove = event => {
+		event.preventDefault()
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+		const db = getDatabase(app);
+		remove(ref(db, 'users/' + fvalues.id))
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+		setOpen(false)
+	}
 
 	columns.push({
 		field: 'operation',
 		headerName: 'Operation',
-		renderCell: (params) => {
+		renderCell: ({row}) => {
 			return(
-				<Button color="error" variant="outlined" onClick={handleClickOpen}>Delete</Button>
+				<Button color="error" variant="outlined" onClick={() => {
+					setfValues({...row})
+					setOpen(true)
+				}}>Delete</Button>
 			)
 		},
 		flex: 1
 	})
+
+	useEffect(async () => {
+		const database = getDatabase(app);
+		const userRef = ref(database, 'users')
+		onValue(userRef, (snapshot) => {
+			const userResult = snapshot.val()
+			let userArr = []
+			for(let key in userResult){
+				userArr.push({
+					...userResult[key],
+					id:key
+				})	
+			}
+			setUsers(userArr);
+		})
+	},[])
+
 
   return (
     <div style={{width: '100%' }}>
       <DataGrid
 				disableSelectionOnClick={true}
 				autoHeight={true}
-        rows={rows}
+        rows={users}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
@@ -81,7 +94,7 @@ function UsersTable() {
       />
 			 <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -89,8 +102,8 @@ function UsersTable() {
           Are you sure you want to delete this user?
         </DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleRemove} autoFocus>
             Delete
           </Button>
         </DialogActions>
