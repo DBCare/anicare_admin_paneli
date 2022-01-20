@@ -138,7 +138,6 @@ function CompanyTable() {
 		event.preventDefault()
 		const db = getDatabase(app);
 		
-		console.log(fvalues)
 		const productRef = ref(db, 'products')
 
 		onValue(productRef, (snapshot) => {
@@ -171,7 +170,7 @@ function CompanyTable() {
 				remove(ref(db, 'products/' + product.id))
 			})
 		})
-				
+
 		setDeleteOpen(false);
 		setfValues({})
 	}

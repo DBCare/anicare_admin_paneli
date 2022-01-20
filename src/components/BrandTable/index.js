@@ -160,9 +160,29 @@ function BrandTable() {
 
 	const handleRemove = event => {
 		event.preventDefault()
-		
+
 		const db = getDatabase(app);
-		remove(ref(db, 'brands/' + fvalues.id))
+		const productRef = ref(db, 'products')
+
+		onValue(productRef, (snapshot) => {
+			const productResult = snapshot.val()
+
+			// get all the products
+			let productArr = []
+			for(let key in productResult){
+				productArr.push({
+					...productResult[key],
+					id:key,
+				})
+			}
+
+			const productIds = productArr.filter(product => product.brand_id === fvalues.id)
+			remove(ref(db, 'brands/' + fvalues.id))
+			productIds.forEach(product => {
+				remove(ref(db, 'products/' + product.id))
+			})
+
+		})
 		
 		setfValues({})
 		setDeleteOpen(false);

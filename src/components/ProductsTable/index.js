@@ -146,7 +146,6 @@ function ProductTable() {
 						return item;
 					})
 
-					console.log(productArr)
 					setCompanies(companyArr)
 					setBrands(brandArr)
 					setProducts(productArr)
@@ -157,7 +156,6 @@ function ProductTable() {
 
 	const handleSubmit = event  => {
 		event.preventDefault();
-		console.log(fvalues);
 
 		const db = getDatabase(app);
 		push(ref(db, 'products'), fvalues);
@@ -169,7 +167,6 @@ function ProductTable() {
 
 	const handleUpdate = event => {
 		event.preventDefault()
-		console.log(fvalues)
 
 		const db = getDatabase(app);
 		update(ref(db, 'products/' + fvalues.id), fvalues)
