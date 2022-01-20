@@ -43,6 +43,7 @@ const style = {
 
 function CompanyTable() {
 	const [companies, setCompanies] = useState(null);
+	const [brands, setBrands] = useState(null);
 	const [fvalues, setfValues] = useState("")
 	const [addOpen, setAddOpen] = useState(false);
 	const [editOpen, setEditOpen] = useState(false);
@@ -71,7 +72,8 @@ function CompanyTable() {
 				let brandArr = []
 				for(let key in brandResult){
 					brandArr.push({
-						...brandResult[key]
+						...brandResult[key],
+						id:key
 					})
 				}
 
@@ -84,6 +86,7 @@ function CompanyTable() {
 					}
 				})
 				setCompanies(companyArr)
+				setBrands(brandArr)
 			})
 		});
 	},[])	
@@ -134,7 +137,41 @@ function CompanyTable() {
 	const handleRemove = (event) => {
 		event.preventDefault()
 		const db = getDatabase(app);
-		remove(ref(db, 'companies/' + fvalues.id))
+		
+		console.log(fvalues)
+		const productRef = ref(db, 'products')
+
+		onValue(productRef, (snapshot) => {
+			const productResult = snapshot.val()
+			
+			// get all the products
+			let productArr = []
+			for(let key in productResult){
+				productArr.push({
+					...productResult[key],
+					id:key,
+				})
+			}
+
+			// remove all the associated brands & products
+			const brandIds = brands.filter(brand => brand.company_id === fvalues.id)
+			const productIds = productArr.filter(function(product){
+				for(let i=0; i<brandIds.length; i++){
+					if(brandIds[i].id === product.brand_id){
+						return product
+					}
+				}
+			})
+
+			remove(ref(db, 'companies/' + fvalues.id))
+			brandIds.forEach(brand => {
+				remove(ref(db, 'brands/' + brand.id))
+			})
+			productIds.forEach(product => {
+				remove(ref(db, 'products/' + product.id))
+			})
+		})
+				
 		setDeleteOpen(false);
 		setfValues({})
 	}

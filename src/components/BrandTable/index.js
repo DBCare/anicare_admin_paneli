@@ -130,8 +130,6 @@ function BrandTable() {
 					return item;
 				})
 
-				console.log(brandArr)
-
 				setCompanies(companyArr)
 				setBrands(brandArr)
 
