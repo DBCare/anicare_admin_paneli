@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { DataGrid } from '@mui/x-data-grid';
 import Backdrop from '@mui/material/Backdrop';
@@ -19,20 +19,17 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
 import './index.scss'
 
-const columns = [
-  { field: 'id', headerName: 'ID' },
-  { field: 'details', headerName: 'Request Details', flex: 1 },
-  { field: 'requester', headerName: 'Requester Name', flex: 1 },
-  { field: 'date', headerName: 'Date', flex: 1 },
-	{ field: 'status', headerName: 'Status', flex: 1 },
-];
+// firebase
+import app from '../../util/firebase'
+import { getDatabase, ref, set, push, remove, update, onValue } from "firebase/database";
 
-const rows = [
-  { id: 1, details: 'Lorem Ipsum', requester: 'Tom Cruise', date: String(new Date()), status:"REJECTED" },
-	{ id: 2, details: 'Lorem Ipsum Dolor Sit Amet', requester: 'Matt Damon', date: String(new Date()), status:"PENDING" },
-	{ id: 3, details: 'Lorem Ipsum Dolor Sit', requester: 'Robert Downey', date: String(new Date()), status:"PENDING" },
-	{ id: 4, details: 'Lorem', requester: 'Christian Bale', date: String(new Date()), status:"APPROVED" },
-	{ id: 5, details: 'Lorem Ipsum', requester: 'Henry Cavil', date: String(new Date()), status:"APPROVED" }
+
+const columns = [
+  { field: 'id', headerName: 'ID', flex:1 },
+	{ field: 'category', headerName: 'Category', flex:1 },
+	{ field: 'description', headerName: 'Description', flex:1 },
+	{ field: 'name', headerName: 'Name', flex:1 },
+	{ field: 'status', headerName: 'Status', flex:1 },
 ];
 
 const style = {
@@ -45,20 +42,62 @@ const style = {
 	borderRadius : '4px',
   boxShadow: 24,
   p: 4,
+	display:'flex',
+	justifyContent:'center',
+	alignItems:'center'
 };
 
 function RequestsTable() {
 
+	const [requests, setRequests] = useState([])
+	const [fvalues, setfValues] = useState("")
 	const [activeRow, setActiveRow] = useState({})
 
 	const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-	const doubleClickHandler = ({row}) => {
-		console.log(row)
-		setActiveRow(row)
-		setOpen(true);
+	columns.push({
+		field: 'operation',
+		headerName: 'Operation',
+		renderCell: ({row}) => {
+			return(
+				<Button color="warning" variant="contained" onClick={() => {
+					setfValues({...row})
+					setOpen(true)
+				}}>Set Status</Button>
+			)
+		},
+		flex: 1
+	})
+
+	useEffect(() => {
+		const database = getDatabase(app);
+		const requestRef = ref(database, 'requests')
+		onValue(requestRef, (snapshot) => {
+			const requestResult = snapshot.val()
+			let requestArr = []
+			for(let key in requestResult){
+				requestArr.push({
+					...requestResult[key],
+					id:key
+				})	
+			}
+			setRequests(requestArr);
+		})
+	},[])
+
+	const handleUpdate = msg => {
+		console.log(fvalues)
+		console.log(msg)
+
+		const db = getDatabase(app);
+		update(ref(db, 'requests/' + fvalues.id), {
+			...fvalues,
+			status:msg
+		})
+
+		setOpen(false);
 	}
 	
 	return (
@@ -66,12 +105,11 @@ function RequestsTable() {
       <DataGrid
 				disableSelectionOnClick={true}
 				autoHeight={true}
-        rows={rows}
+        rows={requests}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
 				disableExtendRowFullWidth={true}
-				onCellDoubleClick={doubleClickHandler}
 				className="request-table"
       />
 			<Modal
@@ -90,23 +128,31 @@ function RequestsTable() {
 						<List sx={{ 
 							width: '100%', 
 							maxWidth: 360, 
-							bgcolor: 'background.paper'
+							bgcolor: 'background.paper',
+							li:{
+								display:'flex',
+								justifyContent:'center',
+								alignItems:'center'
+							}
 						}}>
 							<ListItem>
-								{activeRow.requester}
+								{fvalues.id}
 							</ListItem>
 							<ListItem>
-								{activeRow.details}
+								{fvalues.category}
 							</ListItem>
 							<ListItem>
-								{activeRow.date}
+								{fvalues.description}
 							</ListItem>
 							<ListItem>
-								{activeRow.status}
+								{fvalues.name}
+							</ListItem>
+							<ListItem>
+								{fvalues.status}
 							</ListItem>
 							<ListItem sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-								<Button variant="contained" href="#" color="success">Approve</Button>
-								<Button variant="contained" href="#" color="error">Reject</Button>
+								<Button variant="contained" href="#" color="success" onClick={() => handleUpdate("approved")}>Approve</Button>
+								<Button variant="contained" href="#" color="error" onClick={() => handleUpdate("rejected")}>Reject</Button>
 							</ListItem>
 						</List>
           </Box>

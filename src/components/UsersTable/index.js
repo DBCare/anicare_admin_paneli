@@ -54,7 +54,7 @@ function UsersTable() {
 		headerName: 'Operation',
 		renderCell: ({row}) => {
 			return(
-				<Button color="error" variant="outlined" onClick={() => {
+				<Button color="error" variant="contained" onClick={() => {
 					setfValues({...row})
 					setOpen(true)
 				}}>Delete</Button>
