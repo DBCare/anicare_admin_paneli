@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+# CSE 343 Software Engineering
+## [Anicare Mobile App](https://github.com/DBCare/anicare_frontend)
+## Anicare Admin Panel
+### State Diagram
+![admin_panel_state_diagram (1)](https://user-images.githubusercontent.com/37713845/153413346-fb35f993-19e9-4220-ad15-171179ed472f.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Test Cases
+![image](https://user-images.githubusercontent.com/37713845/153414760-8d516d43-b839-4cac-8717-2ed04b17cbe2.png)
+![image](https://user-images.githubusercontent.com/37713845/153414781-724b11e9-af57-4b01-b7b8-82705ac62636.png)
+![image](https://user-images.githubusercontent.com/37713845/153414854-4e2b9807-0dc5-4c01-adf2-da2c754b4413.png)
+![image](https://user-images.githubusercontent.com/37713845/153414881-ffc251de-6cde-45b0-ab9d-3d909e425e9a.png)
+![image](https://user-images.githubusercontent.com/37713845/153414904-041c292e-f802-476c-a86a-9015e977a8e5.png)
+![image](https://user-images.githubusercontent.com/37713845/153414923-caefada7-1638-4ac2-9c0e-01b4ff2f4b0d.png)
+![image](https://user-images.githubusercontent.com/37713845/153414938-320122d9-b6e8-412a-bb41-3dfdede48df8.png)
+![image](https://user-images.githubusercontent.com/37713845/153414986-79eca34b-bfa7-438e-ac3e-f24e13081751.png)
+![image](https://user-images.githubusercontent.com/37713845/153415020-d2aa0786-834c-4cc2-b21d-9e62e9572aad.png)
+![image](https://user-images.githubusercontent.com/37713845/153415064-725873c5-5e67-4bb5-8c1c-b12e3d8a14e1.png)
+![image](https://user-images.githubusercontent.com/37713845/153415095-0edd37cd-ffec-432f-913a-1baeeaddf72a.png)
+![image](https://user-images.githubusercontent.com/37713845/153415116-4be30ceb-d509-4fde-abc2-b2904ce8895e.png)
+![image](https://user-images.githubusercontent.com/37713845/153415139-963be7aa-24a0-49d3-99db-9bbe5f922c73.png)
+![image](https://user-images.githubusercontent.com/37713845/153415163-129cd40a-a360-43eb-9610-28ec813424ea.png)
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
